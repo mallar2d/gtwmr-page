@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="uk">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Get to Work: My Runemachine</title>
+        <style>
+            :root {
+                color-scheme: light;
+                --desktop: #3b8f91;
+                --window: #bfbfbf;
+                --content: #e0e0e0;
+                --sunken: #d0d0d0;
+                --white: #ffffff;
+                --ink: #1a1a1a;
+                --muted: #4d4d4d;
+                --shadow: #606060;
+                --mid: #808080;
+                --title: #1d4f9a;
+                --title-soft: #8c8ca6;
+                --green: #5a9a5a;
+                --red: #b55a5a;
+                --yellow: #c4a84a;
+                --blue: #4a7ab5;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html {
+                min-height: 100%;
+                background: var(--desktop);
+            }
+
+            body {
+                min-height: 100vh;
+                margin: 0;
+                color: var(--ink);
+                font-family: Tahoma, Verdana, Arial, sans-serif;
+                font-size: 13px;
+                line-height: 1.38;
+                background:
+                    linear-gradient(
+                            45deg,
+                            rgba(255, 255, 255, 0.06) 25%,
+                            transparent 25%
+                        )
+                        0 0 / 8px 8px,
+                    linear-gradient(
+                            45deg,
+                            transparent 75%,
+                            rgba(0, 0, 0, 0.07) 75%
+                        )
+                        0 0 / 8px 8px,
+                    var(--desktop);
+            }
+
+            a {
+                color: #003399;
+            }
+
+            .desktop {
+                max-width: 1040px;
+                margin: 0 auto;
+                padding: 18px 12px 46px;
+            }
+
+            .icons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 14px;
+                margin: 0 0 14px;
+                color: var(--white);
+                text-shadow: 1px 1px 0 #000;
+            }
+
+            .icon {
+                width: 86px;
+                text-align: center;
+            }
+
+            .icon-box {
+                display: grid;
+                place-items: center;
+                width: 38px;
+                height: 34px;
+                margin: 0 auto 5px;
+                border: 1px solid #111;
+                background:
+                    linear-gradient(#f7f7f7 0 18px, #d8d8d8 18px),
+                    var(--content);
+                box-shadow:
+                    inset 1px 1px 0 var(--white),
+                    inset -1px -1px 0 var(--shadow);
+                color: #111;
+                font-weight: bold;
+                text-shadow: none;
+            }
+
+            .window {
+                margin: 0 0 14px;
+                border: 2px solid;
+                border-color: var(--white) var(--shadow) var(--shadow)
+                    var(--white);
+                background: var(--window);
+                box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
+            }
+
+            .titlebar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                min-height: 24px;
+                padding: 3px 4px 3px 8px;
+                color: var(--white);
+                font-weight: bold;
+                background: linear-gradient(90deg, var(--title), #7197c9);
+            }
+
+            .titlebar.inactive {
+                background: linear-gradient(90deg, var(--title-soft), #b5b5bd);
+            }
+
+            .window-buttons {
+                display: flex;
+                gap: 3px;
+            }
+
+            .window-button {
+                display: grid;
+                place-items: center;
+                width: 18px;
+                height: 16px;
+                border: 1px solid;
+                border-color: var(--white) var(--shadow) var(--shadow)
+                    var(--white);
+                background: var(--window);
+                color: var(--ink);
+                font-size: 11px;
+                line-height: 1;
+            }
+
+            .content {
+                padding: 12px;
+            }
+
+            .hero {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) 230px;
+                gap: 12px;
+                align-items: stretch;
+            }
+
+            .hero h1 {
+                margin: 0 0 8px;
+                font-size: clamp(27px, 5vw, 46px);
+                line-height: 0.98;
+                letter-spacing: 0;
+            }
+
+            .lead {
+                max-width: 68ch;
+                margin: 0 0 12px;
+                font-size: 15px;
+            }
+
+            .status-panel {
+                border: 2px solid;
+                border-color: var(--shadow) var(--white) var(--white)
+                    var(--shadow);
+                background: var(--white);
+                color: var(--ink);
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+                min-height: 100%;
+                padding: 9px;
+            }
+
+            .status-panel h2 {
+                margin-bottom: 8px;
+                color: #003399;
+                font-family: Tahoma, Verdana, Arial, sans-serif;
+            }
+
+            .status-line {
+                display: grid;
+                grid-template-columns: 92px 1fr;
+                gap: 7px;
+                padding: 5px 0;
+                border-bottom: 1px solid #b5b5b5;
+            }
+
+            .status-line:last-child {
+                border-bottom: 0;
+            }
+
+            .status-key {
+                color: var(--muted);
+                font-weight: bold;
+            }
+
+            .toolbar {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 7px;
+                margin-top: 12px;
+            }
+
+            .button {
+                display: inline-block;
+                min-width: 92px;
+                padding: 5px 10px;
+                border: 2px solid;
+                border-color: var(--white) var(--shadow) var(--shadow)
+                    var(--white);
+                background: var(--window);
+                color: var(--ink);
+                text-align: center;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+            .button:active {
+                border-color: var(--shadow) var(--white) var(--white)
+                    var(--shadow);
+                padding: 6px 9px 4px 11px;
+            }
+
+            .button.disabled {
+                color: var(--muted);
+                cursor: default;
+                opacity: 0.72;
+            }
+
+            .button.disabled:active {
+                border-color: var(--white) var(--shadow) var(--shadow)
+                    var(--white);
+                padding: 5px 10px;
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+            }
+
+            .panel {
+                border: 2px solid;
+                border-color: var(--shadow) var(--white) var(--white)
+                    var(--shadow);
+                background: var(--content);
+                padding: 10px;
+            }
+
+            h2 {
+                margin: 0 0 8px;
+                font-size: 16px;
+            }
+
+            h3 {
+                margin: 0 0 4px;
+                font-size: 13px;
+            }
+
+            p {
+                margin: 0 0 10px;
+            }
+
+            ul {
+                margin: 8px 0 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            li {
+                position: relative;
+                margin: 0 0 8px;
+                padding-left: 18px;
+            }
+
+            li::before {
+                content: ">";
+                position: absolute;
+                left: 0;
+                color: var(--blue);
+                font-family: "Courier New", monospace;
+                font-weight: bold;
+            }
+
+            .features li {
+                padding-left: 0;
+            }
+
+            .features li::before {
+                content: "";
+            }
+
+            .feature-title {
+                display: block;
+                margin-bottom: 2px;
+                color: #111;
+                font-weight: bold;
+            }
+
+            .rows {
+                border: 2px solid;
+                border-color: var(--shadow) var(--white) var(--white)
+                    var(--shadow);
+                background: var(--white);
+            }
+
+            .row {
+                display: grid;
+                grid-template-columns: 150px 1fr;
+                gap: 8px;
+                padding: 6px 8px;
+                border-bottom: 1px solid #b5b5b5;
+            }
+
+            .row:last-child {
+                border-bottom: 0;
+            }
+
+            .label {
+                color: var(--muted);
+                font-weight: bold;
+            }
+
+            .meter {
+                display: grid;
+                gap: 8px;
+                border: 2px solid;
+                border-color: var(--shadow) var(--white) var(--white)
+                    var(--shadow);
+                background: var(--white);
+                padding: 9px;
+            }
+
+            .meter-line {
+                display: grid;
+                grid-template-columns: 160px 1fr 46px;
+                gap: 8px;
+                align-items: center;
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+            }
+
+            .bar {
+                height: 17px;
+                border: 1px solid #333;
+                background: var(--sunken);
+                box-shadow: inset 1px 1px 0 #777;
+            }
+
+            .bar span {
+                display: block;
+                height: 100%;
+                background:
+                    repeating-linear-gradient(
+                        90deg,
+                        rgba(255, 255, 255, 0.22),
+                        rgba(255, 255, 255, 0.22) 6px,
+                        transparent 6px,
+                        transparent 12px
+                    ),
+                    var(--green);
+            }
+
+            .notice {
+                border: 1px solid #8f7a22;
+                background: #fff4bf;
+                padding: 8px;
+            }
+
+            .audio-list {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+            }
+
+            .media-grid {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 10px;
+            }
+
+            .media-slot {
+                display: grid;
+                min-height: 118px;
+                place-items: center;
+                border: 2px solid;
+                border-color: var(--shadow) var(--white) var(--white)
+                    var(--shadow);
+                background:
+                    linear-gradient(45deg, #c8c8c8 25%, transparent 25%) 0 0 /
+                        10px 10px,
+                    linear-gradient(45deg, transparent 75%, #c8c8c8 75%) 0 0 /
+                        10px 10px,
+                    var(--sunken);
+                color: var(--muted);
+                font-family: "Courier New", monospace;
+                text-align: center;
+            }
+
+            .media-note {
+                margin-top: 8px;
+                color: var(--muted);
+                font-size: 12px;
+            }
+
+            .social-icons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 10px;
+                border: 2px solid;
+                border-color: var(--shadow) var(--white) var(--white)
+                    var(--shadow);
+                background: var(--white);
+            }
+
+            .social-icon {
+                display: grid;
+                grid-template-rows: 34px auto;
+                width: 78px;
+                gap: 5px;
+                color: var(--ink);
+                text-align: center;
+                text-decoration: none;
+            }
+
+            .social-icon.disabled {
+                color: var(--muted);
+                cursor: default;
+            }
+
+            .social-icon-mark {
+                display: grid;
+                place-items: center;
+                width: 38px;
+                height: 34px;
+                margin: 0 auto;
+                border: 1px solid #111;
+                background:
+                    linear-gradient(#f7f7f7 0 17px, #d8d8d8 17px),
+                    var(--content);
+                box-shadow:
+                    inset 1px 1px 0 var(--white),
+                    inset -1px -1px 0 var(--shadow);
+                color: #111;
+            }
+
+            .social-icon.youtube .social-icon-mark {
+                background:
+                    linear-gradient(#fff 0 9px, #d96b6b 9px 25px, #9f3333 25px),
+                    var(--content);
+            }
+
+            .social-icon.discord .social-icon-mark {
+                background:
+                    linear-gradient(#fff 0 9px, #7d86c8 9px 25px, #4c559f 25px),
+                    var(--content);
+            }
+
+            .social-icon.steam .social-icon-mark {
+                background:
+                    linear-gradient(#fff 0 9px, #9a9a9a 9px 25px, #555 25px),
+                    var(--content);
+            }
+
+            .social-icon-label {
+                overflow-wrap: anywhere;
+                font-size: 12px;
+            }
+
+            .social-svg {
+                width: 24px;
+                height: 24px;
+                image-rendering: pixelated;
+            }
+
+            .track {
+                border: 2px solid;
+                border-color: var(--shadow) var(--white) var(--white)
+                    var(--shadow);
+                background: var(--content);
+                padding: 10px;
+            }
+
+            .track-title {
+                display: block;
+                margin-bottom: 6px;
+                font-weight: bold;
+            }
+
+            .track-note {
+                margin-bottom: 8px;
+                color: var(--muted);
+                font-size: 12px;
+            }
+
+            audio {
+                display: block;
+                width: 100%;
+            }
+
+            .log {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                font-family: "Courier New", monospace;
+                font-size: 12px;
+            }
+
+            .log li {
+                margin: 0;
+                padding: 6px 8px;
+                border-bottom: 1px solid #b5b5b5;
+            }
+
+            .log li::before {
+                content: "";
+            }
+
+            .log li:last-child {
+                border-bottom: 0;
+            }
+
+            .faq {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+                margin: 0;
+            }
+
+            .faq-item {
+                border: 2px solid;
+                border-color: var(--shadow) var(--white) var(--white)
+                    var(--shadow);
+                background: var(--white);
+                padding: 8px;
+            }
+
+            .faq-item h3 {
+                margin-bottom: 5px;
+                color: #003399;
+            }
+
+            .faq-item p {
+                margin-bottom: 0;
+            }
+
+            .taskbar {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 2;
+                display: flex;
+                align-items: center;
+                gap: 7px;
+                min-height: 30px;
+                padding: 3px 6px;
+                border-top: 2px solid var(--white);
+                background: var(--window);
+                box-shadow: inset 0 1px 0 #e8e8e8;
+                font-size: 12px;
+            }
+
+            .start {
+                padding: 3px 10px;
+                border: 2px solid;
+                border-color: var(--white) var(--shadow) var(--shadow)
+                    var(--white);
+                font-weight: bold;
+                background: var(--window);
+            }
+
+            .task {
+                flex: 1;
+                max-width: 340px;
+                padding: 4px 8px;
+                border: 2px solid;
+                border-color: var(--shadow) var(--white) var(--white)
+                    var(--shadow);
+                background: var(--sunken);
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .clock {
+                margin-left: auto;
+                padding: 4px 8px;
+                border: 1px solid;
+                border-color: var(--shadow) var(--white) var(--white)
+                    var(--shadow);
+            }
+
+            @media (max-width: 760px) {
+                .desktop {
+                    padding-left: 8px;
+                    padding-right: 8px;
+                }
+
+                .hero,
+                .audio-list,
+                .media-grid,
+                .grid,
+                .faq {
+                    grid-template-columns: 1fr;
+                }
+
+                .row,
+                .meter-line {
+                    grid-template-columns: 1fr;
+                    gap: 3px;
+                }
+
+                .status-panel {
+                    min-height: 0;
+                }
+
+                .task {
+                    max-width: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Social pictograms use paths from Pixelarticons, MIT License, Copyright (c) 2019 Gerrit Halfmann. -->
+        <main class="desktop">
+            <section class="window">
+                <div class="titlebar">
+                    <span>СOREBOUND_OVERVIEW.x86_64</span>
+                    <div class="window-buttons" aria-hidden="true">
+                        <span class="window-button">_</span>
+                        <span class="window-button">□</span>
+                        <span class="window-button">×</span>
+                    </div>
+                </div>
+                <div class="content hero">
+                    <div>
+                        <h1>Corebound</h1>
+                        <p class="lead">
+                            Завантажуй термінал і до роботи! Це ізометрична
+                            головоломка, де ти керуєш роботом-розвідником через
+                            візуальне блочне програмування. Досліджуй механіки,
+                            уникай небезпек та вирушай виконувати завдання для
+                            порятунку світу.
+                        </p>
+                        <p>
+                            Вітаємо в корпоративному терміналі Omens Inc.
+                            Світові ресурси вичерпані. Усі інфраструктурні
+                            проєкти зупинено. Цей проєкт - має намір врятувати
+                            нас світ.
+                        </p>
+                        <p>
+                            Як новопризначений Старший Оператор Машин, твоя
+                            задача проста: увійди в систему, запрограмуй
+                            дистанційного робота-дослідника серії RM та дійди до
+                            кінця. Не став зайвих запитань. Не відхиляйся від
+                            місії.
+                        </p>
+                        <div class="toolbar" aria-label="Команди вікна">
+                            <a class="button" href="#features">Огляд</a>
+                            <a class="button" href="#progress">Прогрес</a>
+                            <a class="button" href="#music">Музика</a>
+                            <a class="button" href="#media">Медіа</a>
+                            <a class="button" href="#developer">Автор</a>
+                            <a class="button" href="#faq">FAQ</a>
+                            <span
+                                class="button disabled"
+                                aria-disabled="true"
+                                title="Публічне демо планується до кінця літа"
+                                >Демо: скоро</span
+                            >
+                        </div>
+                    </div>
+                    <div class="status-panel" aria-label="Короткий статус гри">
+                        <h2>STATUS</h2>
+                        <div class="status-line">
+                            <span class="status-key">Етап розробки</span>
+                            <span>Pre-alpha</span>
+                        </div>
+                        <div class="status-line">
+                            <span class="status-key"
+                                >Приблизна дата виходу</span
+                            >
+                            <span>2027</span>
+                        </div>
+                        <div class="status-line">
+                            <span class="status-key"
+                                >Останнє оновлення сайту</span
+                            >
+                            <span>28.05.2026</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="window" id="features">
+                <div class="titlebar inactive">
+                    <span>PRODUCT_OVERVIEW</span>
+                    <div class="window-buttons" aria-hidden="true">
+                        <span class="window-button">_</span>
+                        <span class="window-button">□</span>
+                        <span class="window-button">×</span>
+                    </div>
+                </div>
+                <div class="content grid">
+                    <div class="panel">
+                        <h2>Що це за гра</h2>
+                        <p>
+                            Corebound - це казуальна пазл-гра, що поєднує
+                            алгоритми візуального програмування з синергією
+                            навколишнього середовища, і все це - в атмосферному
+                            інтерфейсі старої операційної системи.
+                        </p>
+                        <div class="notice">
+                            Примітка: ця сторінка оновлюється вручну з певним
+                            інтервалом часу.
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h2>Про проєкт</h2>
+                        <div class="rows">
+                            <div class="row">
+                                <div class="label">Версія</div>
+                                <div>-</div>
+                            </div>
+                            <div class="row">
+                                <div class="label">Головна ціль зараз</div>
+                                <div>перше закрите демо</div>
+                            </div>
+                            <div class="row">
+                                <div class="label">Рушій</div>
+                                <div>Godot 4.6.1</div>
+                            </div>
+                            <div class="row">
+                                <div class="label">Жанр</div>
+                                <div>
+                                    Ізометрична головоломка з елементами
+                                    метроїдванії
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="window">
+                <div class="titlebar">
+                    <span>MAIN_FEATURES</span>
+                    <div class="window-buttons" aria-hidden="true">
+                        <span class="window-button">_</span>
+                        <span class="window-button">□</span>
+                        <span class="window-button">×</span>
+                    </div>
+                </div>
+                <div class="content">
+                    <ul class="features">
+                        <li>
+                            <span class="feature-title">Ретро інтерфейс</span>
+                            Твоє головне меню - ностальгічний робочий стіл.
+                            Вікна, іконки, панелі, налаштування і місія живуть в
+                            одному старому корпоративному терміналі.
+                        </li>
+                        <li>
+                            <span class="feature-title"
+                                >Візуальне програмування</span
+                            >
+                            Жодних знань коду не потрібно. Став блоки команд,
+                            будуй логічний ланцюжок і дивись, як машина ідеально
+                            його виконує... або врізається в найближче дерево.
+                        </li>
+                        <li>
+                            <span class="feature-title"
+                                >Скануй, комбінуй та перемагай</span
+                            >
+                            Використовуй SCAN, аналізуй об'єкти на полі, знаходь
+                            їхні властивості та застосовуй аддони робота для
+                            ланцюгових реакцій.
+                        </li>
+                        <li>
+                            <span class="feature-title">Затишна дістопія</span>
+                            Іржавий індустріальний світ, техногенне сміття серед
+                            природних локацій і 5 актів - від перших полігонів
+                            до небезпечних підземних зон.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="window" id="progress">
+                <div class="titlebar inactive">
+                    <span>DEMO_PROGRESS</span>
+                    <div class="window-buttons" aria-hidden="true">
+                        <span class="window-button">_</span>
+                        <span class="window-button">□</span>
+                        <span class="window-button">×</span>
+                    </div>
+                </div>
+                <div class="content grid">
+                    <div class="panel">
+                        <h2>Прогрес демо</h2>
+                        <div class="meter">
+                            <div class="meter-line">
+                                <div>GDD</div>
+                                <div class="bar" aria-label="100 відсотків">
+                                    <span style="width: 100%"></span>
+                                </div>
+                                <div>done</div>
+                            </div>
+                            <div class="meter-line">
+                                <div>Відкриті зони</div>
+                                <div class="bar" aria-label="15 відсотків">
+                                    <span style="width: 15%"></span>
+                                </div>
+                                <div>15%</div>
+                            </div>
+                            <div class="meter-line">
+                                <div>Середовище виконання команд</div>
+                                <div class="bar" aria-label="20 відсотків">
+                                    <span style="width: 20%"></span>
+                                </div>
+                                <div>20%</div>
+                            </div>
+                            <div class="meter-line">
+                                <div>Контент першої локації</div>
+                                <div class="bar" aria-label="5 відсотків">
+                                    <span style="width: 5%"></span>
+                                </div>
+                                <div>5%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h2>Що зараз в пріоритеті</h2>
+                        <ul>
+                            <li>зв'язок оверворлду із зонами-челенджами</li>
+                            <li>
+                                команди SCAN / INTERACT / CUT у програмній сітці
+                            </li>
+                            <li>
+                                об'єкти на мапі: дерева, болото, точки зміни
+                                аддонів
+                            </li>
+                            <li>базовий інтерфейс користувача</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="window" id="music">
+                <div class="titlebar inactive">
+                    <span>ARCHIVE_AUDIO</span>
+                    <div class="window-buttons" aria-hidden="true">
+                        <span class="window-button">_</span>
+                        <span class="window-button">□</span>
+                        <span class="window-button">×</span>
+                    </div>
+                </div>
+                <div class="content">
+                    <p>
+                        Два треки зі старої версії гри. Вони не увійдуть у
+                        фінальний білд, але залишаються тут як маленький архів
+                        розробки.
+                    </p>
+                    <div class="audio-list">
+                        <div class="track">
+                            <span class="track-title">Poligon</span>
+                            <p class="track-note">
+                                Мав грати в одному з перших актів гри
+                            </p>
+                            <audio controls preload="none" src="Poligon.mp3">
+                                Ваш браузер не підтримує HTML-аудіо.
+                            </audio>
+                        </div>
+                        <div class="track">
+                            <span class="track-title"
+                                >Almost 20 Feet Under</span
+                            >
+                            <p class="track-note">
+                                Саундтрек мав грати в останньому акті грі
+                            </p>
+                            <audio
+                                controls
+                                preload="none"
+                                src="almost-20-feet-under.mp3"
+                            >
+                                Ваш браузер не підтримує HTML-аудіо.
+                            </audio>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="window" id="media">
+                <div class="titlebar inactive">
+                    <span>MEDIA_LIBRARY</span>
+                    <div class="window-buttons" aria-hidden="true">
+                        <span class="window-button">_</span>
+                        <span class="window-button">□</span>
+                        <span class="window-button">×</span>
+                    </div>
+                </div>
+                <div class="content">
+                    <p class="media-note">
+                        Скріншоти та трейлери будуть додані, коли з'явиться
+                        матеріал, який варто показувати публічно.
+                    </p>
+                </div>
+            </section>
+
+            <section class="window" id="developer">
+                <div class="titlebar">
+                    <span>DEVELOPER_INFO</span>
+                    <div class="window-buttons" aria-hidden="true">
+                        <span class="window-button">_</span>
+                        <span class="window-button">□</span>
+                        <span class="window-button">×</span>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="panel">
+                        <div class="row">
+                            <div class="label">Розробник</div>
+                            <div>mallar2d</div>
+                        </div>
+                        <div class="social-icons" aria-label="Соцмережі автора">
+                            <a
+                                class="social-icon youtube"
+                                href="https://www.youtube.com/@Mallar2D"
+                                aria-label="YouTube Mallar2D"
+                            >
+                                <span class="social-icon-mark">
+                                    <svg
+                                        class="social-svg"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            fill="currentColor"
+                                            d="M20 17V7h2v10zm-2-2V9h2v6zM2 7h2v10H2zm14 0h2v10h-2zM4 5h12v2H4zm0 12h12v2H4z"
+                                        />
+                                    </svg>
+                                </span>
+                                <span class="social-icon-label">YouTube</span>
+                            </a>
+                            <span
+                                class="social-icon discord disabled"
+                                aria-label="Discord буде додано пізніше"
+                                title="Додати нік або посилання"
+                            >
+                                <span class="social-icon-mark">
+                                    <svg
+                                        class="social-svg"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            fill="currentColor"
+                                            d="M20 2H4v2h16zm0 14H6v2h14zm2-12h-2v12h2zM4 4H2v18h2zm2 14H4v2h2zm0-6h4v2H6zm0-4h8v2H6z"
+                                        />
+                                    </svg>
+                                </span>
+                                <span class="social-icon-label">Discord</span>
+                            </span>
+                            <span
+                                class="social-icon steam disabled"
+                                aria-label="Steam буде додано пізніше"
+                                title="Додати посилання"
+                            >
+                                <span class="social-icon-mark">
+                                    <svg
+                                        class="social-svg"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            fill="currentColor"
+                                            d="M3 13h2v8H3zm2 8h14v2H5zm14-8h2v8h-2zm-9-2h4v2h-4zm4-2h4v2h-4zm4 2h4v2h-4zM6 9h4v2H6zm-4 2h4v2H2zM0 7h2v4H0zm2-2h2v2H2zm18 0h2v2h-2zm2 2h2v4h-2zM4 3h16v2H4zm6 12h4v2h-4zm-2 2h2v4H8zm6 0h2v4h-2z"
+                                        />
+                                    </svg>
+                                </span>
+                                <span class="social-icon-label">Steam</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="window" id="faq">
+                <div class="titlebar">
+                    <span>FAQ</span>
+                    <div class="window-buttons" aria-hidden="true">
+                        <span class="window-button">_</span>
+                        <span class="window-button">□</span>
+                        <span class="window-button">×</span>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="faq">
+                        <div class="faq-item">
+                            <h3>Коли вийде публічне демо?</h3>
+                            <p>
+                                Публічне демо планується до виходу десь до кінця
+                                літа.
+                            </p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>На яких платформах буде гра?</h3>
+                            <p>
+                                Гра вийде виключно на ПК під управлінням Windows
+                                та Linux.
+                            </p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Які мови будуть доступні?</h3>
+                            <p>
+                                Українська як оригінальна мова та англійська.
+                                Інші локалізації поки не плануються.
+                            </p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Наскільки складними будуть головоломки?</h3>
+                            <p>
+                                Гра буде відносно простою і дружньою до гравців,
+                                які просто хочуть експериментувати з механіками.
+                            </p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Чи треба вміти програмувати?</h3>
+                            <p>
+                                Ні. Гра дружня для людей, які ніколи в житті не
+                                написали жодного рядка коду.
+                            </p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Скільки буде локацій?</h3>
+                            <p>
+                                У фінальній версії гри буде 5 великих локацій.
+                            </p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Чи можна проходити гру різними способами?</h3>
+                            <p>
+                                Так. У грі буде багато способів пройти той чи
+                                інший відрізок за допомогою різних комбінацій
+                                аддонів для робота.
+                            </p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Коли з'явиться сторінка в Steam?</h3>
+                            <p>
+                                Сторінка гри в Steam з'явиться разом з публічним
+                                демо. На даний момент на ній просто ще немає
+                                чого показувати.
+                            </p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Де стежити за розробкою?</h3>
+                            <p>
+                                Новини та стан розробки будуть публікуватися на
+                                цій сторінці. В середньому оновлення плануються
+                                раз на тиждень.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="taskbar">
+            <div class="start">Пуск</div>
+            <div class="task">OMENS INC. Corporate Terminal</div>
+            <div class="clock">В розробці</div>
+        </footer>
+    </body>
+</html>
