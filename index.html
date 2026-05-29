@@ -3,25 +3,28 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Get to Work: My Runemachine</title>
+        <title>Corebound</title>
         <style>
             :root {
                 color-scheme: light;
-                --desktop: #3b8f91;
-                --window: #bfbfbf;
-                --content: #e0e0e0;
-                --sunken: #d0d0d0;
-                --white: #ffffff;
-                --ink: #1a1a1a;
-                --muted: #4d4d4d;
-                --shadow: #606060;
-                --mid: #808080;
-                --title: #1d4f9a;
-                --title-soft: #8c8ca6;
-                --green: #5a9a5a;
-                --red: #b55a5a;
-                --yellow: #c4a84a;
-                --blue: #4a7ab5;
+                --desktop: #1e6f68;
+                --desktop-dark: #144943;
+                --window: #b9bdb5;
+                --content: #dde2da;
+                --sunken: #c7cec5;
+                --white: #f6fff8;
+                --ink: #17201c;
+                --muted: #3f514b;
+                --disabled: #7f8a84;
+                --shadow: #515b55;
+                --mid: #6f756f;
+                --title: #087d72;
+                --title-bright: #12a89d;
+                --title-soft: #78908a;
+                --green: #2fae68;
+                --red: #b55252;
+                --yellow: #d0b34e;
+                --accent: #0b6f68;
             }
 
             * {
@@ -42,6 +45,12 @@
                 line-height: 1.38;
                 background:
                     linear-gradient(
+                        180deg,
+                        rgba(20, 73, 67, 0.78),
+                        rgba(30, 111, 104, 0.28) 45%,
+                        rgba(20, 73, 67, 0.84)
+                    ),
+                    linear-gradient(
                             45deg,
                             rgba(255, 255, 255, 0.06) 25%,
                             transparent 25%
@@ -53,11 +62,17 @@
                             rgba(0, 0, 0, 0.07) 75%
                         )
                         0 0 / 8px 8px,
+                    linear-gradient(
+                            90deg,
+                            rgba(18, 168, 157, 0.12) 1px,
+                            transparent 1px
+                        )
+                        0 0 / 32px 32px,
                     var(--desktop);
             }
 
             a {
-                color: #003399;
+                color: var(--accent);
             }
 
             .desktop {
@@ -86,14 +101,14 @@
                 width: 38px;
                 height: 34px;
                 margin: 0 auto 5px;
-                border: 1px solid #111;
+                border: 1px solid var(--ink);
                 background:
                     linear-gradient(#f7f7f7 0 18px, #d8d8d8 18px),
                     var(--content);
                 box-shadow:
                     inset 1px 1px 0 var(--white),
                     inset -1px -1px 0 var(--shadow);
-                color: #111;
+                color: var(--ink);
                 font-weight: bold;
                 text-shadow: none;
             }
@@ -105,6 +120,7 @@
                     var(--white);
                 background: var(--window);
                 box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
+                outline: 1px solid rgba(8, 125, 114, 0.45);
             }
 
             .titlebar {
@@ -115,11 +131,27 @@
                 padding: 3px 4px 3px 8px;
                 color: var(--white);
                 font-weight: bold;
-                background: linear-gradient(90deg, var(--title), #7197c9);
+                background:
+                    repeating-linear-gradient(
+                        0deg,
+                        rgba(255, 255, 255, 0.1),
+                        rgba(255, 255, 255, 0.1) 1px,
+                        transparent 1px,
+                        transparent 3px
+                    ),
+                    linear-gradient(90deg, var(--title), var(--title-bright));
             }
 
             .titlebar.inactive {
-                background: linear-gradient(90deg, var(--title-soft), #b5b5bd);
+                background:
+                    repeating-linear-gradient(
+                        0deg,
+                        rgba(255, 255, 255, 0.1),
+                        rgba(255, 255, 255, 0.1) 1px,
+                        transparent 1px,
+                        transparent 3px
+                    ),
+                    linear-gradient(90deg, var(--title-soft), #9cafaa);
             }
 
             .window-buttons {
@@ -179,7 +211,7 @@
 
             .status-panel h2 {
                 margin-bottom: 8px;
-                color: #003399;
+                color: var(--accent);
                 font-family: Tahoma, Verdana, Arial, sans-serif;
             }
 
@@ -188,7 +220,7 @@
                 grid-template-columns: 92px 1fr;
                 gap: 7px;
                 padding: 5px 0;
-                border-bottom: 1px solid #b5b5b5;
+                border-bottom: 1px solid #9aa7a0;
             }
 
             .status-line:last-child {
@@ -221,6 +253,10 @@
                 font-weight: bold;
             }
 
+            .button:hover {
+                background: #cfe7e2;
+            }
+
             .button:active {
                 border-color: var(--shadow) var(--white) var(--white)
                     var(--shadow);
@@ -228,9 +264,13 @@
             }
 
             .button.disabled {
-                color: var(--muted);
+                color: var(--disabled);
                 cursor: default;
                 opacity: 0.72;
+            }
+
+            .button.disabled:hover {
+                background: var(--window);
             }
 
             .button.disabled:active {
@@ -283,7 +323,7 @@
                 content: ">";
                 position: absolute;
                 left: 0;
-                color: var(--blue);
+                color: var(--accent);
                 font-family: "Courier New", monospace;
                 font-weight: bold;
             }
@@ -299,7 +339,7 @@
             .feature-title {
                 display: block;
                 margin-bottom: 2px;
-                color: #111;
+                color: var(--ink);
                 font-weight: bold;
             }
 
@@ -315,7 +355,7 @@
                 grid-template-columns: 150px 1fr;
                 gap: 8px;
                 padding: 6px 8px;
-                border-bottom: 1px solid #b5b5b5;
+                border-bottom: 1px solid #9aa7a0;
             }
 
             .row:last-child {
@@ -348,9 +388,9 @@
 
             .bar {
                 height: 17px;
-                border: 1px solid #333;
+                border: 1px solid var(--shadow);
                 background: var(--sunken);
-                box-shadow: inset 1px 1px 0 #777;
+                box-shadow: inset 1px 1px 0 var(--mid);
             }
 
             .bar span {
@@ -368,8 +408,8 @@
             }
 
             .notice {
-                border: 1px solid #8f7a22;
-                background: #fff4bf;
+                border: 1px solid #8c7626;
+                background: #f7edbd;
                 padding: 8px;
             }
 
@@ -393,9 +433,9 @@
                 border-color: var(--shadow) var(--white) var(--white)
                     var(--shadow);
                 background:
-                    linear-gradient(45deg, #c8c8c8 25%, transparent 25%) 0 0 /
+                    linear-gradient(45deg, #b1bbb6 25%, transparent 25%) 0 0 /
                         10px 10px,
-                    linear-gradient(45deg, transparent 75%, #c8c8c8 75%) 0 0 /
+                    linear-gradient(45deg, transparent 75%, #b1bbb6 75%) 0 0 /
                         10px 10px,
                     var(--sunken);
                 color: var(--muted);
@@ -441,14 +481,14 @@
                 width: 38px;
                 height: 34px;
                 margin: 0 auto;
-                border: 1px solid #111;
+                border: 1px solid var(--ink);
                 background:
                     linear-gradient(#f7f7f7 0 17px, #d8d8d8 17px),
                     var(--content);
                 box-shadow:
                     inset 1px 1px 0 var(--white),
                     inset -1px -1px 0 var(--shadow);
-                color: #111;
+                color: var(--ink);
             }
 
             .social-icon.youtube .social-icon-mark {
@@ -459,13 +499,13 @@
 
             .social-icon.discord .social-icon-mark {
                 background:
-                    linear-gradient(#fff 0 9px, #7d86c8 9px 25px, #4c559f 25px),
+                    linear-gradient(#fff 0 9px, #22b2a7 9px 25px, #087d72 25px),
                     var(--content);
             }
 
             .social-icon.steam .social-icon-mark {
                 background:
-                    linear-gradient(#fff 0 9px, #9a9a9a 9px 25px, #555 25px),
+                    linear-gradient(#fff 0 9px, #9aa7a0 9px 25px, #515b55 25px),
                     var(--content);
             }
 
@@ -516,7 +556,7 @@
             .log li {
                 margin: 0;
                 padding: 6px 8px;
-                border-bottom: 1px solid #b5b5b5;
+                border-bottom: 1px solid #9aa7a0;
             }
 
             .log li::before {
@@ -544,7 +584,7 @@
 
             .faq-item h3 {
                 margin-bottom: 5px;
-                color: #003399;
+                color: var(--accent);
             }
 
             .faq-item p {
@@ -564,7 +604,7 @@
                 padding: 3px 6px;
                 border-top: 2px solid var(--white);
                 background: var(--window);
-                box-shadow: inset 0 1px 0 #e8e8e8;
+                box-shadow: inset 0 1px 0 var(--white);
                 font-size: 12px;
             }
 
@@ -633,7 +673,7 @@
         <main class="desktop">
             <section class="window">
                 <div class="titlebar">
-                    <span>СOREBOUND_OVERVIEW.x86_64</span>
+                    <span>COREBOUND_OVERVIEW.x86_64</span>
                     <div class="window-buttons" aria-hidden="true">
                         <span class="window-button">_</span>
                         <span class="window-button">□</span>
@@ -955,7 +995,7 @@
                             <span
                                 class="social-icon discord disabled"
                                 aria-label="Discord буде додано пізніше"
-                                title="none"
+                                title="Додати нік або посилання"
                             >
                                 <span class="social-icon-mark">
                                     <svg
@@ -974,8 +1014,8 @@
                             </span>
                             <span
                                 class="social-icon steam disabled"
-                                aria-label="Steam"
-                                title="https://steamcommunity.com/id/mallar2d/"
+                                aria-label="Steam буде додано пізніше"
+                                title="Додати посилання"
                             >
                                 <span class="social-icon-mark">
                                     <svg
